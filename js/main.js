@@ -77,6 +77,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  /* 7. Door drawings: on touch screens, open each door as its card scrolls into view */
+  const doorCards = document.querySelectorAll(".door-card");
+  const touch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  if (touch && doorCards.length && "IntersectionObserver" in window) {
+    const doorIO = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const card = entry.target;
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.6) card.classList.add("is-active");
+        else if (!entry.isIntersecting) card.classList.remove("is-active"); // closes again once off-screen, so it replays
+      });
+    }, { threshold: [0, 0.6] });
+    doorCards.forEach((c) => doorIO.observe(c));
+  }
+
+  /* 8. Brand logos: on touch screens, colour each logo while it passes through the middle of the screen */
+  const logos = document.querySelectorAll(".brand-logo");
+  if (touch && logos.length && "IntersectionObserver" in window) {
+    const logoIO = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.target.classList.toggle("is-color", entry.isIntersecting));
+    }, { rootMargin: "-25% 0px -25% 0px", threshold: 0.5 });
+    logos.forEach((l) => logoIO.observe(l));
+  }
+
   /* 6. Footer year */
   document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 });
