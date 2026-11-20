@@ -330,21 +330,37 @@ button { font: inherit; cursor: pointer; }
 .help-choose h3 { font-size: 1.3rem; margin-bottom: 4px; }
 .help-choose p { margin: 0; color: var(--on-navy-muted); }
 
-/* ---------- Prices ---------- */
-.price-list { display: grid; gap: 14px; }
-.price-row {
-  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+/* ---------- Services list ---------- */
+.service-list { list-style: none; display: grid; gap: 14px; }
+.service-row {
+  display: flex; align-items: center; gap: 16px;
   padding: 18px 20px; border-radius: var(--radius-sm);
   border: 1px solid var(--line); background: var(--white);
-  transition: border-color 0.25s, transform 0.25s var(--ease);
+  transition: border-color 0.25s, transform 0.25s var(--ease), box-shadow 0.25s;
 }
-.price-row:hover { border-color: var(--gold-dark); transform: translateX(4px); }
-.price-row h3 { font-size: 1.02rem; margin: 0 0 2px; }
-.price-row p { margin: 0; font-size: 0.85rem; color: var(--muted); }
-.price-row .amount { text-align: right; white-space: nowrap; }
-.price-row .amount small { display: block; font-size: 0.72rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
-.price-row .amount strong { font-size: 1.35rem; color: var(--navy); font-weight: 800; }
-.price-foot { margin-top: 22px; font-size: 0.9rem; color: var(--muted); }
+.service-row:hover { border-color: var(--gold-dark); transform: translateX(4px); }
+.service-row h3 { font-size: 1.02rem; margin: 0 0 2px; }
+.service-row p { margin: 0; font-size: 0.88rem; color: var(--muted); }
+.service-row > div { flex: 1; min-width: 0; }
+.service-check {
+  flex: 0 0 36px; width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(242, 205, 118, 0.22); color: var(--navy);
+}
+.service-check svg { width: 18px; height: 18px; }
+.service-row--feature {
+  flex-wrap: wrap; background: var(--navy); border-color: var(--navy); color: var(--white);
+  padding: 22px;
+}
+.service-row--feature:hover { transform: none; border-color: var(--navy); box-shadow: var(--shadow); }
+.service-row--feature p { color: var(--on-navy-muted); }
+.service-row--feature .service-check { background: var(--gold); color: var(--navy); }
+.service-row--feature .btn { width: 100%; }
+
+.service-row--offer { background: #fdf8ec; border-color: rgba(226, 180, 79, 0.55); }
+.service-row--offer .service-check { background: var(--gold); }
+.service-price { flex-shrink: 0; text-align: right; font-size: 1.6rem; font-weight: 800; color: var(--navy); line-height: 1; white-space: nowrap; }
+.service-price small { display: block; font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
 
 /* ---------- How it works ---------- */
 .steps { list-style: none; display: grid; gap: 18px; counter-reset: step; }
@@ -644,7 +660,8 @@ button { font: inherit; cursor: pointer; }
 @keyframes daBlink { 50% { opacity: 0.35; } }
 @keyframes daWave { 0% { opacity: 0; transform: translateY(4px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(-6px); } }
 
-.door-card-note { font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+.door-card-note { font-size: 0.85rem; font-weight: 700; color: var(--muted); line-height: 1.3; }
+.door-card-foot .link-arrow { white-space: nowrap; flex-shrink: 0; }
 
 /* ---------- Scroll reveal (only when JS is on) ---------- */
 .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
@@ -707,7 +724,10 @@ button { font: inherit; cursor: pointer; }
   .tab-panel .ph { aspect-ratio: 4 / 3; }
 
   .card-grid { grid-template-columns: repeat(3, 1fr); }
-  .price-list { grid-template-columns: 1fr 1fr; }
+  .service-list { grid-template-columns: 1fr 1fr; }
+  .service-row--offer { grid-column: 1 / -1; padding: 20px 28px; }
+  .service-row--feature { grid-column: 1 / -1; flex-wrap: nowrap; padding: 24px 28px; }
+  .service-row--feature .btn { width: auto; }
   .steps { grid-template-columns: repeat(3, 1fr); }
   .review-grid { grid-template-columns: repeat(3, 1fr); }
   .gallery-grid { grid-template-columns: repeat(3, 1fr); }
@@ -720,9 +740,14 @@ button { font: inherit; cursor: pointer; }
 }
 
 /* Door grid: 2 columns on tablet/small laptop, 4 on wide screens */
-@media (min-width: 960px) { .card-grid--doors { grid-template-columns: repeat(2, 1fr); } }
+/* flex so an odd last row sits centred instead of hanging left */
+@media (min-width: 640px) {
+  .card-grid--doors { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+  .card-grid--doors .door-card { flex: 0 0 calc((100% - 20px) / 2); }
+}
 @media (min-width: 1100px) {
-  .card-grid--doors { grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .card-grid--doors { gap: 22px; }
+  .card-grid--doors .door-card { flex-basis: calc((100% - 66px) / 4); }
   .card-grid--doors .door-card-body { padding: 18px 20px 22px; }
   .card-grid--doors .door-card h3 { font-size: 1.15rem; }
 }
